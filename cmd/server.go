@@ -81,6 +81,10 @@ func setupRoutes() {
 	ginEngine.POST("/auth/magiclink", handlers.CreateMagiclinkHandler)
 	ginEngine.POST("/auth/magiclink/verify", handlers.VerifyMagiclinkHandler)
 
+	authGroup.POST("/assets/upload", handlers.AssetUploadHandler)
+	authGroup.GET("/search/options", handlers.GetSearchOptionsHandler)
+	authGroup.GET("/history/options/:search_id", handlers.GetSearchHistoryOptionsHandler)
+	authGroup.GET("/history", handlers.GetSearchHistoryHandler)
 }
 
 func startServer() {

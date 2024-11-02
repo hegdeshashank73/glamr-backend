@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/hegdeshashank73/glamr-backend/dsql"
@@ -18,4 +19,10 @@ func GetPerson(tx dsql.Tx, person *entities.Person, arg entities.GetPersonArg) (
 	// To implement Get Person
 
 	return ret, nil
+}
+
+func CreatePerson(tx *sql.Tx, arg *entities.CreatePersonArg) errors.GlamrError {
+	//implement logic
+
+	return nil
 }

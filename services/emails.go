@@ -104,3 +104,17 @@ func sendEmailToEmail2(email string, subjectTemplate string, bodyTemplate string
 	}
 	return nil
 }
+
+func CreateEmailTemplate(req entities.CreateEmailTemplateReq) (entities.CreateEmailTemplateRes, errors.GlamrError) {
+	st := time.Now()
+	defer utils.LogTimeTaken("services.CreateEmailTemplate", st)
+
+	res := entities.CreateEmailTemplateRes{}
+
+	derr := repository.CreateEmailTemplate(vendors.DBMono, entities.CreateEmailTemplateArg(req))
+	if derr != nil {
+		return res, derr
+	}
+	res.Message.Title = "Email template created successfully"
+	return res, nil
+}

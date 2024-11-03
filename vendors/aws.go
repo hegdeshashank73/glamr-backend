@@ -42,7 +42,7 @@ func initAWS() {
 		}))
 	} else {
 		awsSess = session.Must(session.NewSessionWithOptions(session.Options{
-			Profile: "duggup",
+			Profile: "glamr",
 			Config:  awsConfig,
 		}))
 		awsConfig.Credentials = stscreds.NewCredentials(awsSess, viper.GetString("AWS_MONO_ROLE"))

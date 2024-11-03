@@ -73,9 +73,6 @@ func setupRoutes() {
 
 	// Metadata
 	ginEngine.GET("/test", handlers.TestHandler)
-	// ginEngine.GET("/site", handlers.SiteHandler)
-	// ginEngine.GET("/site/geo", handlers.SiteGeoHandler)
-	// ginEngine.GET("/site/vouches/roles", handlers.VouchRolesHandler)
 
 	// Auth: Magiclinks
 	ginEngine.POST("/auth/magiclink", handlers.CreateMagiclinkHandler)
@@ -85,6 +82,8 @@ func setupRoutes() {
 	authGroup.GET("/search/options", handlers.GetSearchOptionsHandler)
 	authGroup.GET("/history/options/:search_id", handlers.GetSearchHistoryOptionsHandler)
 	authGroup.GET("/history", handlers.GetSearchHistoryHandler)
+
+	privateGroup.POST("/templates/email", handlers.CreateEmailTemplateHandler)
 }
 
 func startServer() {

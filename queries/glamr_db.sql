@@ -11,7 +11,6 @@ CREATE TABLE `auth_tokens` (
   `user_id` bigint DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`token`),
-  KEY `auth_tokens_created_at_idx` (`created_at`),
   KEY `auth_tokens_user_id_idx` (`user_id`),
   CONSTRAINT `auth_tokens_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `auth_users` (`id`)
 );
@@ -21,7 +20,6 @@ CREATE TABLE `auth_magiclink` (
   `email` varchar(256) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`token`),
-  KEY `auth_tokens_idx_created_at` (`created_at`)
 );
 
 CREATE TABLE `people_people` (
@@ -41,7 +39,7 @@ CREATE TABLE `people_searches` (
   `api_response` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `people_searches_user_id_idx` (`user_id`),
-  CONSTRAINT `people_searches_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `auth_users` (`id`) ON DELETE CASCADE
+  CONSTRAINT `people_searches_people_people_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `people_people` (`id`) ON DELETE CASCADE
 );
 
 CREATE TABLE `searches_options`(
@@ -58,4 +56,13 @@ CREATE TABLE `searches_options`(
     PRIMARY KEY (`id`),
     KEY `searches_options_search_id_idx` (`search_id`),
     CONSTRAINT `searches_options_search_id_fkey` FOREIGN KEY (`search_id`) REFERENCES `people_searches` (`id`) ON DELETE CASCADE
+);
+
+CREATE TABLE `templates_emails` (
+  `id` bigint NOT NULL,
+  `name` varchar(64) NOT NULL,
+  `body` text NOT NULL,
+  `subject` text NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unq_templates_emails_name` (`name`)
 );

@@ -25,3 +25,15 @@ type EmailTemplate struct {
 }
 
 type GetEmailTemplateArg GetEmailTemplateReq
+
+type CreateEmailTemplateReq struct {
+	Subject string `json:"subject"`
+	Body    string `json:"body"`
+	Name    string `json:"name"`
+}
+
+type CreateEmailTemplateArg CreateEmailTemplateReq
+
+type CreateEmailTemplateRes struct {
+	Message Message `json:"message"`
+}

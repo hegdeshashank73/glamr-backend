@@ -12,7 +12,6 @@ type AssetUploadHandlerReq struct {
 	EntityID    common.Snowflake `json:"entity_id"`
 	EntityType  AssetsEntityType `json:"entity_type"`
 	ContentType string           `json:"content_type"`
-	FileSize    int64            `json:"file_size"`
 	FileExt     string           `json:"ext"`
 }
 
@@ -20,12 +19,6 @@ func (r *AssetUploadHandlerReq) Validate() errors.GlamrError {
 
 	if r.EntityType == 0 {
 		return errors.GlamrErrorGeneralBadRequest("missing entity type")
-	}
-
-	if r.EntityType == AssetsEntityType_CLOTHING {
-		if r.EntityID == 0 {
-			return errors.GlamrErrorGeneralBadRequest("missing entity id")
-		}
 	}
 
 	switch r.ContentType {

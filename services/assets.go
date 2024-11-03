@@ -23,15 +23,15 @@ func GeneratePresignedURL(person entities.Person, req entities.AssetUploadHandle
 
 	var key = ""
 	if req.EntityType == entities.AssetsEntityType_CLOTHING {
-		key = fmt.Sprintf("%s/answers/%s/%s.%s", person.Id, req.EntityID, common.GenerateSnowflake(), req.FileExt)
-		res.AccessURL = fmt.Sprintf("%s/%s", viper.GetString("USER_ASSETS_BASE_URL"), key)
+		key = fmt.Sprintf("%s/clothing-uploads/%s.%s", person.Id, common.GenerateSnowflake(), req.FileExt)
+		res.AccessURL = fmt.Sprintf("%s/%s", viper.GetString("USER_BASE_URL"), key)
 		res.Key = key
 
 	} else {
 		return res, errors.GlamrErrorGeneralBadRequest("unsupported entity type")
 	}
 	sreq, _ := vendors.S3Client.PutObjectRequest(&s3.PutObjectInput{
-		Bucket:      aws.String(viper.GetString("USER_ASSETS_S3_BUCKET")),
+		Bucket:      aws.String(viper.GetString("USER_ASSETS_BUCKET")),
 		Key:         aws.String(key),
 		ContentType: aws.String(req.ContentType),
 	})

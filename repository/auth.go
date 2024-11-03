@@ -99,7 +99,7 @@ func UpdateNotifToken(tx *sql.Tx, person entities.Person, arg entities.UpdateNot
 }
 
 func CreateMagiclink(tx *sql.Tx, arg entities.CreateMagiclinkArg) errors.GlamrError {
-	query := `INSERT INTO auth_magiclink (token, email) VALUES (?,?,?);`
+	query := `INSERT INTO auth_magiclink (token, email) VALUES (?,?);`
 	if _, err := tx.Exec(query, arg.Token, arg.Email); err != nil {
 		logrus.Error(err)
 		return errors.GlamrErrorDatabaseIssue()

@@ -12,10 +12,8 @@ type Person struct {
 }
 
 type About struct {
-	Username  string `json:"username"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
-	Img       string `json:"img"`
 }
 
 type GetPersonReq struct {

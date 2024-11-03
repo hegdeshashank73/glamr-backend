@@ -33,7 +33,7 @@ func GetEmailTemplate(req entities.GetEmailTemplateReq) (entities.GetEmailTempla
 }
 
 func SendMagiclink(recipientEmail string, data entities.DataSendMagiclink) errors.GlamrError {
-	ret, derr := GetEmailTemplate(entities.GetEmailTemplateReq{Name: "MagicLinkEmail"})
+	ret, derr := GetEmailTemplate(entities.GetEmailTemplateReq{Name: "AuthMagiclink"})
 	if derr != nil {
 		return derr
 	}
@@ -46,7 +46,7 @@ func SendMagiclink(recipientEmail string, data entities.DataSendMagiclink) error
 
 func sendEmailToEmail2(email string, subjectTemplate string, bodyTemplate string, data any) errors.GlamrError {
 	senderEmail := "Glamr <no-reply@glamr.us>"
-	replyToEmail := "shashin@glamr.us"
+	replyToEmail := "shashin.bhaskar@gmail.com"
 	tmpl, err := template.New("bodyTemplate").Parse(bodyTemplate)
 	if err != nil {
 		logrus.Error("failed to parse template,", err)

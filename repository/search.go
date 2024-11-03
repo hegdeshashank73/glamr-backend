@@ -43,7 +43,7 @@ func CreateSearchOptions(tx *sql.Tx, arg entities.CreateSearchOptionsArg) errors
 	st := time.Now()
 	defer utils.LogTimeTaken("repository.CreateSearchOptions", st)
 
-	query := `INSERT INTO searches_options (id, search_id, title, link, source, source_icon, in_stock, price, image, rank, currency) VALUES `
+	query := `INSERT INTO searches_options (id, search_id, title, link, source, source_icon, in_stock, price, image, display_order, currency) VALUES `
 	values := []interface{}{}
 	for i, option := range arg.SearchOptions {
 		query += `(?,?,?,?,?,?,?,?,?,?,?),`
@@ -100,7 +100,7 @@ func GetSearchHistoryOptions(tx *sql.Tx, arg entities.GetSearchHistoryOptionsArg
 	defer utils.LogTimeTaken("repository.GetSearchHistoryOptions", st)
 	ret := entities.GetSearchHistoryOptionsRes{}
 
-	query := `SELECT title, link, source, source_icon, in_stock, price, image, currency FROM searches_options WHERE search_id = ? ORDER BY rank;`
+	query := `SELECT title, link, source, source_icon, in_stock, price, image, currency FROM searches_options WHERE search_id = ? ORDER BY display_order;`
 	rows, err := tx.Query(query, arg.SearchID)
 	if err != nil {
 		logrus.Error(err)

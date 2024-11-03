@@ -66,3 +66,6 @@ CREATE TABLE `templates_emails` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unq_templates_emails_name` (`name`)
 );
+
+ALTER TABLE `searches_options` RENAME COLUMN `rank` TO `display_order`;
+ALTER TABLE `searches_options` ADD COLUMN `image` varchar(256) NOT NULL DEFAULT '';

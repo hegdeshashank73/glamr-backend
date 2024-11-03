@@ -39,7 +39,6 @@ func GetSerpAPISearchResults(person *entities.Person, req entities.SearchOptions
 		logrus.Error("Failed to fetch data from SERP API", err)
 		return res, errors.GlamrErrorInternalServerError()
 	}
-
 	ret, derr := repository.CreatePersonSearch(tx, *person, entities.SearchOptionsArg(req), results)
 	if derr != nil {
 		tx.Rollback()
@@ -55,7 +54,6 @@ func GetSerpAPISearchResults(person *entities.Person, req entities.SearchOptions
 	if serpAPIObject.SearchMetadata.Status != "Success" {
 		return res, errors.GlamrErrorGeneralBadRequest("Please retry the search")
 	}
-
 	var searchOptions []entities.SearchOptions
 	for _, visualMatch := range serpAPIObject.VisualMatches {
 		if visualMatch.Price.Currency != "₹" || visualMatch.Price.ExtractedPrice == 0.0 {
@@ -77,7 +75,6 @@ func GetSerpAPISearchResults(person *entities.Person, req entities.SearchOptions
 	sort.Slice(searchOptions, func(i, j int) bool {
 		return searchOptions[i].Price < searchOptions[j].Price
 	})
-
 	res.SearchOptions = searchOptions
 
 	derr = repository.CreateSearchOptions(tx, entities.CreateSearchOptionsArg{

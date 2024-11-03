@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/hegdeshashank73/glamr-backend/common"
 	"github.com/hegdeshashank73/glamr-backend/entities"
 	"github.com/hegdeshashank73/glamr-backend/services"
 	"github.com/hegdeshashank73/glamr-backend/utils"
@@ -21,6 +20,9 @@ func GetSearchOptionsHandler(c *gin.Context) {
 	countryCode := c.Query("country")
 	req := entities.SearchOptionsReq{}
 	req.S3Key = s3Key
+	if countryCode == "" {
+		countryCode = "US"
+	}
 	req.CountryCode = countryCode
 
 	res, derr := services.GetSerpAPISearchResults(&person, req)
@@ -52,9 +54,9 @@ func GetSearchHistoryOptionsHandler(c *gin.Context) {
 
 	val, _ := c.Get("person")
 	person := val.(entities.Person)
-	searchID := c.Query("search_id")
+	searchID := utils.GetEntityIDFromParams(c, "search_id")
 	req := entities.GetSearchHistoryOptionsReq{}
-	req.SearchID = common.BuildSnowflake(searchID)
+	req.SearchID = searchID
 	res, derr := services.GetSearchHistoryOptions(&person, req)
 	if derr != nil {
 		derr.Respond(c)

@@ -50,13 +50,12 @@ func GetSerpAPISearchResults(person *entities.Person, req entities.SearchOptions
 		logrus.Error("failed to unmarshal json,", err)
 		return res, errors.GlamrErrorInternalServerError()
 	}
-
 	if serpAPIObject.SearchMetadata.Status != "Success" {
 		return res, errors.GlamrErrorGeneralBadRequest("Please retry the search")
 	}
 	var searchOptions []entities.SearchOptions
 	for _, visualMatch := range serpAPIObject.VisualMatches {
-		if visualMatch.Price.Currency != "₹" || visualMatch.Price.ExtractedPrice == 0.0 {
+		if visualMatch.Price.ExtractedPrice == 0.0 {
 			continue
 		}
 		option := entities.SearchOptions{

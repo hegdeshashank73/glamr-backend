@@ -43,6 +43,9 @@ func CreateSearchOptions(tx *sql.Tx, arg entities.CreateSearchOptionsArg) errors
 	st := time.Now()
 	defer utils.LogTimeTaken("repository.CreateSearchOptions", st)
 
+	if len(arg.SearchOptions) == 0 {
+		return nil
+	}
 	query := `INSERT INTO searches_options (id, search_id, title, link, source, source_icon, in_stock, price, image, display_order, currency) VALUES `
 	values := []interface{}{}
 	for i, option := range arg.SearchOptions {

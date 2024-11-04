@@ -55,7 +55,7 @@ func GetSerpAPISearchResults(person *entities.Person, req entities.SearchOptions
 	}
 	var searchOptions []entities.SearchOptions
 	for _, visualMatch := range serpAPIObject.VisualMatches {
-		if visualMatch.Price.ExtractedPrice == 0.0 {
+		if visualMatch.Price.Currency != "$" || visualMatch.Price.ExtractedPrice == 0.0 {
 			continue
 		}
 		option := entities.SearchOptions{

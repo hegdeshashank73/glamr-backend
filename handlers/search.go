@@ -14,8 +14,6 @@ func GetSearchOptionsHandler(c *gin.Context) {
 	st := time.Now()
 	defer utils.LogTimeTaken("handlers.SearchOptionsHandler", st)
 
-	val, _ := c.Get("person")
-	person := val.(entities.Person)
 	s3Key := c.Query("s3_key")
 	countryCode := c.Query("country")
 	req := entities.SearchOptionsReq{}
@@ -25,7 +23,7 @@ func GetSearchOptionsHandler(c *gin.Context) {
 	}
 	req.CountryCode = countryCode
 
-	res, derr := services.GetSerpAPISearchResults(&person, req)
+	res, derr := services.GetSerpAPISearchResults(req)
 	if derr != nil {
 		derr.Respond(c)
 		return

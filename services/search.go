@@ -16,7 +16,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func GetSerpAPISearchResults(person *entities.Person, req entities.SearchOptionsReq) (entities.SearchOptionsRes, errors.GlamrError) {
+func GetSerpAPISearchResults(req entities.SearchOptionsReq) (entities.SearchOptionsRes, errors.GlamrError) {
 	st := time.Now()
 	defer utils.LogTimeTaken("services.GetSerpAPISearchResults", st)
 
@@ -39,7 +39,7 @@ func GetSerpAPISearchResults(person *entities.Person, req entities.SearchOptions
 		logrus.Error("Failed to fetch data from SERP API", err)
 		return res, errors.GlamrErrorInternalServerError()
 	}
-	ret, derr := repository.CreatePersonSearch(tx, *person, entities.SearchOptionsArg(req), results)
+	ret, derr := repository.CreatePersonSearch(tx, entities.SearchOptionsArg(req), results)
 	if derr != nil {
 		tx.Rollback()
 		return res, derr

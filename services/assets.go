@@ -15,7 +15,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func GeneratePresignedURL(person entities.Person, req entities.AssetUploadHandlerReq) (entities.AssetUploadHandlerRes, errors.GlamrError) {
+func GeneratePresignedURL(req entities.AssetUploadHandlerReq) (entities.AssetUploadHandlerRes, errors.GlamrError) {
 	st := time.Now()
 	defer utils.LogTimeTaken("services.GeneratePresignedURL", st)
 
@@ -23,7 +23,7 @@ func GeneratePresignedURL(person entities.Person, req entities.AssetUploadHandle
 
 	var key = ""
 	if req.EntityType == entities.AssetsEntityType_CLOTHING {
-		key = fmt.Sprintf("%s/clothing-uploads/%s.%s", person.Id, common.GenerateSnowflake(), req.FileExt)
+		key = fmt.Sprintf("%s/clothing-uploads/%s.%s", "243725088341860353", common.GenerateSnowflake(), req.FileExt)
 		res.AccessURL = fmt.Sprintf("%s/%s", viper.GetString("USER_BASE_URL"), key)
 		res.Key = key
 

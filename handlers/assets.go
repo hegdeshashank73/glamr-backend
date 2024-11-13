@@ -29,10 +29,7 @@ func AssetUploadHandler(c *gin.Context) {
 		return
 	}
 
-	val, _ := c.Get("person")
-	person := val.(entities.Person)
-
-	res, derr := services.GeneratePresignedURL(person, req)
+	res, derr := services.GeneratePresignedURL(req)
 	if derr != nil {
 		derr.Respond(c)
 		return

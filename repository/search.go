@@ -14,7 +14,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func CreatePersonSearch(tx dsql.Tx, person entities.Person, arg entities.SearchOptionsArg, serpAPIResults map[string]interface{}) (entities.CreatePersonSearchRet, errors.GlamrError) {
+func CreatePersonSearch(tx dsql.Tx, arg entities.SearchOptionsArg, serpAPIResults map[string]interface{}) (entities.CreatePersonSearchRet, errors.GlamrError) {
 	st := time.Now()
 	defer utils.LogTimeTaken("repository.CreateSearchOptions", st)
 
@@ -28,7 +28,7 @@ func CreatePersonSearch(tx dsql.Tx, person entities.Person, arg entities.SearchO
 
 	id := common.GenerateSnowflake()
 	query := `INSERT INTO people_searches (id, user_id, s3_key, country_code, api_response, created_at) VALUES (?,?,?,?,?,?);`
-	_, err = tx.Exec(query, id, person.Id, arg.S3Key, arg.CountryCode, apiResponse, time.Now().Unix())
+	_, err = tx.Exec(query, id, "243725088341860353", arg.S3Key, arg.CountryCode, apiResponse, time.Now().Unix())
 	if err != nil {
 		logrus.Error("failed to insert into people_searches,", err)
 		return ret, errors.GlamrErrorInternalServerError()

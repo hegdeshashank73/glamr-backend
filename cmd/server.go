@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"database/sql"
+	"fmt"
 	"io"
 	"os"
 
@@ -88,5 +89,6 @@ func setupRoutes() {
 
 func startServer() {
 	logrus.Info("Starting the server on :1729")
-	ginEngine.Run(":1729")
+	err := ginEngine.Run(":1729")
+	fmt.Println(err)
 }

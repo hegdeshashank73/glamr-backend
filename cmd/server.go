@@ -78,8 +78,8 @@ func setupRoutes() {
 	// ginEngine.POST("/auth/magiclink", handlers.CreateMagiclinkHandler)
 	// ginEngine.POST("/auth/magiclink/verify", handlers.VerifyMagiclinkHandler)
 
-	ginEngine.POST("/assets/upload", handlers.AssetUploadHandler)
-	ginEngine.GET("/search/options", handlers.GetSearchOptionsHandler)
+	authNoAuthGroup.POST("/assets/upload", handlers.AssetUploadHandler)
+	authNoAuthGroup.GET("/search/options", handlers.GetSearchOptionsHandler)
 	// authGroup.GET("/history/options/:search_id", handlers.GetSearchHistoryOptionsHandler)
 	// authGroup.GET("/history", handlers.GetSearchHistoryHandler)
 

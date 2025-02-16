@@ -21,10 +21,10 @@ func GetPerson(tx dsql.Tx, person *entities.Person, arg entities.GetPersonArg) (
 	if arg.Token != "" {
 		query = `SELECT id, first_name, last_name 
 		FROM people_people pp
-		INNER JOIN auth_tokens at ON at.user_id = pp.id where at.token = ?;`
+		INNER JOIN auth_tokens at ON at.user_id = pp.id where at.token = $1;`
 		args = append(args, arg.Token)
 	} else if arg.UserID > 0 {
-		query = `SELECT if, first_name, last_name FROM people_people where id=?;`
+		query = `SELECT id, first_name, last_name FROM people_people where id = $1;`
 		args = append(args, arg.UserID)
 	}
 
@@ -45,7 +45,9 @@ func GetPerson(tx dsql.Tx, person *entities.Person, arg entities.GetPersonArg) (
 }
 func CreatePerson(tx *sql.Tx, arg *entities.CreatePersonArg) errors.GlamrError {
 	_, err := tx.Exec(
-		`INSERT IGNORE INTO people_people (id, first_name, last_name) VALUES (?, ?, ?)`,
+		`INSERT INTO people_people (id, first_name, last_name) 
+          VALUES ($1, $2, $3)
+          ON CONFLICT (id) DO NOTHING;`,
 		arg.Id, arg.FirstName, arg.LastName,
 	)
 	if err != nil {

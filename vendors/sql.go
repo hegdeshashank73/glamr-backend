@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"time"
 
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/hegdeshashank73/glamr-backend/utils"
+	_ "github.com/lib/pq"
 	"github.com/spf13/viper"
 )
 
@@ -42,25 +42,17 @@ func initDB() {
 	config := loadDBConfig()
 	DBConfig = &config
 	DBConfig.Database = viper.GetString("DATABASE.DATABASE")
-	_ = fmt.Sprintf(
-		"host=%s port=%d user=%s password=%s dbname=%s sslmode=require",
-		config.Host,
-		config.Port,
-		config.Username,
-		config.Password,
-		viper.GetString("DATABASE.DATABASE"),
-	)
+
 	dataSourceName := fmt.Sprintf(
-		"%s:%s@tcp(%s:%d)/%s",
+		"postgresql://%s:%s@%s/%s?sslmode=require",
 		config.Username,
 		config.Password,
 		config.Host,
-		config.Port,
-		viper.GetString("DATABASE.DATABASE"),
+		DBConfig.Database,
 	)
 
 	var err error
-	DBMono, err = sql.Open("mysql", dataSourceName)
+	DBMono, err = sql.Open("postgres", dataSourceName)
 	if err != nil {
 		log.Fatalf("Caught Error While Connecting to Postgres DB: %v", err)
 	}

@@ -11,7 +11,7 @@ import (
 
 func GetMagiclink(tx *sql.Tx, arg entities.GetMagiclinkArg) (entities.GetMagiclinkRet, errors.GlamrError) {
 	ret := entities.GetMagiclinkRet{}
-	query := `SELECT token, email FROM auth_magiclink WHERE token = ?;`
+	query := `SELECT token, email FROM auth_magiclink WHERE token = $1;`
 	err := tx.QueryRow(query, arg.Token).Scan(
 		&ret.Token,
 		&ret.Email,
@@ -28,7 +28,7 @@ func GetMagiclink(tx *sql.Tx, arg entities.GetMagiclinkArg) (entities.GetMagicli
 }
 
 func DeleteMagiclink(tx *sql.Tx, arg entities.DeleteMagiclinkArg) errors.GlamrError {
-	query := `DELETE FROM auth_magiclink WHERE token = ?;`
+	query := `DELETE FROM auth_magiclink WHERE token = $1;`
 	if _, err := tx.Exec(query, arg.Token); err != nil {
 		logrus.Error(err)
 		return errors.GlamrErrorDatabaseIssue()
@@ -39,7 +39,7 @@ func DeleteMagiclink(tx *sql.Tx, arg entities.DeleteMagiclinkArg) errors.GlamrEr
 func CreateAndGetAuthUser(tx *sql.Tx, arg entities.CreateAndGetAuthUserArg) (entities.CreateAndGetAuthUserRet, errors.GlamrError) {
 	ret := entities.CreateAndGetAuthUserRet{}
 	newId := common.GenerateSnowflake()
-	query := `INSERT IGNORE INTO auth_users (id, email) VALUES (?,?);`
+	query := `INSERT IGNORE INTO auth_users (id, email) VALUES ($1,$2);`
 	result, err := tx.Exec(query, newId, arg.Email)
 	if err != nil {
 		logrus.Error(err)
@@ -59,7 +59,7 @@ func CreateAndGetAuthUser(tx *sql.Tx, arg entities.CreateAndGetAuthUserArg) (ent
 		return ret, nil
 	}
 
-	query = `SELECT id, email FROM auth_users WHERE email = ?;`
+	query = `SELECT id, email FROM auth_users WHERE email = $1;`
 	err = tx.QueryRow(query, arg.Email).Scan(
 		&ret.AuthUser.Id,
 		&ret.AuthUser.Email,
@@ -76,7 +76,7 @@ func CreateAndGetAuthUser(tx *sql.Tx, arg entities.CreateAndGetAuthUserArg) (ent
 
 func CreateAccessToken(tx *sql.Tx, arg entities.CreateAccessTokenArg) (entities.CreateAccessTokenRet, errors.GlamrError) {
 	ret := entities.CreateAccessTokenRet{}
-	query := `INSERT INTO auth_tokens (token, user_id) VALUES (?,?);`
+	query := `INSERT INTO auth_tokens (token, user_id) VALUES ($1,$2);`
 	_, err := tx.Exec(query, arg.AccessToken, arg.Id)
 	if err != nil {
 		logrus.Error(err)
@@ -88,7 +88,7 @@ func CreateAccessToken(tx *sql.Tx, arg entities.CreateAccessTokenArg) (entities.
 }
 
 func UpdateNotifToken(tx *sql.Tx, person entities.Person, arg entities.UpdateNotifTokenArg) errors.GlamrError {
-	query := `INSERT INTO notifs_tokens (user_id, device_id, fcm_token) VALUES (?,?,?) ON DUPLICATE KEY UPDATE fcm_token = $3;`
+	query := `INSERT INTO notifs_tokens (user_id, device_id, fcm_token) VALUES ($1,$2,$3) ON DUPLICATE KEY UPDATE fcm_token = $3;`
 	_, err := tx.Exec(query, person.Id, arg.DeviceID, arg.FCMToken)
 	if err != nil {
 		logrus.Error(err)
@@ -99,7 +99,7 @@ func UpdateNotifToken(tx *sql.Tx, person entities.Person, arg entities.UpdateNot
 }
 
 func CreateMagiclink(tx *sql.Tx, arg entities.CreateMagiclinkArg) errors.GlamrError {
-	query := `INSERT INTO auth_magiclink (token, email) VALUES (?,?);`
+	query := `INSERT INTO auth_magiclink (token, email) VALUES ($1, $2);`
 	if _, err := tx.Exec(query, arg.Token, arg.Email); err != nil {
 		logrus.Error(err)
 		return errors.GlamrErrorDatabaseIssue()

@@ -17,7 +17,7 @@ func GetEmailTemplate(tx dsql.Tx, arg entities.GetEmailTemplateArg) (entities.Ge
 
 	ret := entities.GetEmailTemplateRet{}
 	err := tx.QueryRow(
-		`Select id, name, body, subject from templates_emails where name = ?`, arg.Name).Scan(
+		`Select id, name, body, subject from templates_emails where name = $1`, arg.Name).Scan(
 		&ret.Template.ID, &ret.Template.Name, &ret.Template.Body, &ret.Template.Subject,
 	)
 
@@ -36,11 +36,11 @@ func CreateEmailTemplate(tx dsql.Tx, arg entities.CreateEmailTemplateArg) errors
 	id := common.GenerateSnowflake()
 
 	query := `INSERT INTO templates_emails (id, name, body, subject)
-				VALUES (?, ?, ?, ?)
-				ON DUPLICATE KEY UPDATE
-					name = VALUES(name),
-					body = VALUES(body),
-					subject = VALUES(subject);`
+          VALUES ($1, $2, $3, $4)
+          ON CONFLICT (name) DO UPDATE SET
+              name = EXCLUDED.name,
+              body = EXCLUDED.body,
+              subject = EXCLUDED.subject;`
 	_, err := tx.Exec(query, id, arg.Name, arg.Body, arg.Subject)
 
 	if err != nil {
